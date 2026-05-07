@@ -4,14 +4,18 @@ Trabalho prático da disciplina de Fundamentos de Inteligência Artificial (UFMG
 
 ## Problema Solucionado 
 
-Minimização da função:
-...
+O trabalho consiste em minimizar a função: 
 
-Sujeito a:
+```math
+f(x) = \sum_{i=1}^{10} x_i^2
+```
+sujeito a:
+```math
+−5≤ x_i ​≤5
+```
+utilizando o algoritmo proposto.
 
-...
-
-### Implementado
+### O que foi implementado:
 - Inicialização aleatória da população
 - Mutação diferencial
 - Cruzamento binomial
