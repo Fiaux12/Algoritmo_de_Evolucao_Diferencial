@@ -1,11 +1,15 @@
 import numpy as np
 import random
+import statistics
 
 D =  10                #numero de variaveis
-N =  [10, 20, 50]      #tamanho da população
-F =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
-CR = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
+# N =  [10, 20, 50]      #tamanho da população
+# F =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
+# CR = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
 
+N = 20
+F = 0.5
+CR = 0.7
 def evolucao_diferencial():
     
     populacao = inicia_populacao()
@@ -21,8 +25,9 @@ def evolucao_diferencial():
 
         iteracoes += 1
   
-    melhor_solucao = min(populacao, key=avaliar_fitness)
-    return melhor_solucao
+    solucao = min(populacao, key=avaliar_fitness)
+    custo = avaliar_fitness(solucao)
+    return solucao, custo
     
 
 def mutacao(populacao, i,):
@@ -67,7 +72,19 @@ def avaliar_fitness(x):
     return np.sum(x**2)
 
 
-solucao = evolucao_diferencial()
+def main():
+    custos = []
+    solucoes = []
 
-print("Melhor solução:", solucao)
-print("Custo minimo:", avaliar_fitness(solucao))
+    for i in range(30):
+        solucao, custo = evolucao_diferencial()
+        custos.append(custo)
+        solucoes.append(solucao)
+
+    melhor_indice = np.argmin(custos)
+
+    print("Melhor solução:", solucoes[melhor_indice])
+    print("Menor custo:", custos[melhor_indice])
+    print("Média dos custos:", statistics.mean(custos))
+
+main()
