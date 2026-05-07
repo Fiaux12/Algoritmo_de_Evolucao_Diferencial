@@ -28,31 +28,37 @@ def evolucao_diferencial():
     while iteracoes < 1:
 
         for i in range(N):
-            # Mutação
             xi = populacao[i]
-            indices = list(range(N))
-            indices.remove(i)
-            
-            xr1, xr2, xr3 = populacao[np.random.choice(indices, 3, replace=False)]            
-            v = xr1 + F * (xr2 - xr3)
 
-            #Aplica a borda
-            v = np.clip(v, -5, 5)
+            # Mutação
+            v = mutacao(populacao, i)
+            u = cruzamento(v, xi)
 
-            # Cruzamento/Recombinação
-            u = np.zeros(D)
-            for j in range(D):
-                num = random.random()
-                if(num < CR):
-                    u[j] = v[j]
-                else:
-                    u[j] = xi[j]
-                
-
-            # 
             # Seleção
 
         iteracoes += 1
+
+def mutacao(populacao, i,):
+    indices = list(range(N))
+    indices.remove(i)
+    xr1, xr2, xr3 = populacao[np.random.choice(indices, 3, replace=False)]            
+    v = xr1 + F * (xr2 - xr3)
+
+    #Aplica a borda
+    v = np.clip(v, -5, 5)
+    return v
+
+def cruzamento(v, xi):
+    u = np.zeros(D)
+    for j in range(D):
+        num = random.random()
+        if(num < CR):
+            u[j] = v[j]
+        else:
+            u[j] = xi[j]
+    
+    return u
+
 
 
 # inicia população: conjunto de varios vetores candidados a x
