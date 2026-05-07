@@ -1,26 +1,27 @@
 import numpy as np
 import random
 import statistics
+from itertools import product
 
 D =  10                #numero de variaveis
-# N =  [10, 20, 50]      #tamanho da população
-# F =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
-# CR = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
+N_ =  [10, 20, 50]      #tamanho da população
+F_ =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
+CR_ = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
 
-N = 20
-F = 0.5
-CR = 0.7
-def evolucao_diferencial():
+# N = 20
+# F = 0.5
+# CR = 0.7
+def evolucao_diferencial(N, F, CR):
     
-    populacao = inicia_populacao()
+    populacao = inicia_populacao(N)
     iteracoes = 0
 
-    while iteracoes < 1000:
+    while iteracoes < 100:
         for i in range(N):
             xi = populacao[i]
 
-            v = mutacao(populacao, i)
-            u = cruzamento(v, xi)
+            v = mutacao(populacao, i, N, F)
+            u = cruzamento(v, xi, CR)
             populacao[i] = selecao(xi, u)
 
         iteracoes += 1
@@ -30,7 +31,7 @@ def evolucao_diferencial():
     return solucao, custo
     
 
-def mutacao(populacao, i,):
+def mutacao(populacao, i, N, F):
     indices = list(range(N))
     indices.remove(i)
     xr1, xr2, xr3 = populacao[np.random.choice(indices, 3, replace=False)]            
@@ -40,7 +41,7 @@ def mutacao(populacao, i,):
     v = np.clip(v, -5, 5)
     return v
 
-def cruzamento(v, xi):
+def cruzamento(v, xi, CR):
     u = np.zeros(D)
 
     # Garante ao menos um gene de v
@@ -64,7 +65,7 @@ def selecao(xi, u):
     else:
         return xi
         
-def inicia_populacao():
+def inicia_populacao(N):
     p = np.random.uniform(-5, 5, (N, D))
     return np.round(p, 2)
 
@@ -73,18 +74,22 @@ def avaliar_fitness(x):
 
 
 def main():
-    custos = []
-    solucoes = []
+    for N, F, CR in product(N_, F_, CR_ ):
+        custos = []
+        # solucoes = []
 
-    for i in range(30):
-        solucao, custo = evolucao_diferencial()
-        custos.append(custo)
-        solucoes.append(solucao)
+        for i in range(30):
+            solucao, custo = evolucao_diferencial(N, F, CR)
+            custos.append(custo)
+            # solucoes.append(solucao)
 
-    melhor_indice = np.argmin(custos)
+        melhor_indice = np.argmin(custos)
 
-    print("Melhor solução:", solucoes[melhor_indice])
-    print("Menor custo:", custos[melhor_indice])
-    print("Média dos custos:", statistics.mean(custos))
+        media = statistics.mean(custos)
+        print(f"N={N}, F={F}, CR={CR} -> Média: {media}")
+
+    # print("Melhor solução:", solucoes[melhor_indice])
+    # print("Menor custo:", custos[melhor_indice])
+    # print("Média dos custos:", statistics.mean(custos))
 
 main()
