@@ -19,9 +19,7 @@ CR = 0.7 #Prob. de Cruzamento CR [0, 1]
 def evolucao_diferencial():
     
     populacao = inicia_populacao()
-    print(populacao)
-
-    custos = np.array([avaliar_fitness(x) for x in populacao])
+    # print(populacao)
 
     iteracoes = 0
 
@@ -30,13 +28,19 @@ def evolucao_diferencial():
         for i in range(N):
             xi = populacao[i]
 
-            # Mutação
             v = mutacao(populacao, i)
             u = cruzamento(v, xi)
-
-            # Seleção
+            populacao[i] = selecao(xi, u)
 
         iteracoes += 1
+    
+    print('Custos:')
+    for x in populacao:
+        print("     ", avaliar_fitness(x))
+    
+    melhor_solucao = min(populacao, key=avaliar_fitness)
+    return melhor_solucao
+    
 
 def mutacao(populacao, i,):
     indices = list(range(N))
@@ -50,26 +54,38 @@ def mutacao(populacao, i,):
 
 def cruzamento(v, xi):
     u = np.zeros(D)
+
+    # Garante ao menos um gene de v
+    j_rand = np.random.randint(D)
     for j in range(D):
         num = random.random()
-        if(num < CR):
+        if(num < CR) or j == j_rand:
             u[j] = v[j]
         else:
             u[j] = xi[j]
     
     return u
 
+def selecao(xi, u):
+    custo_xi = avaliar_fitness(xi)
+    custo_u = avaliar_fitness(u)
 
-
+    if(custo_u <= custo_xi):
+        return u
+    else:
+        return xi
+        
 # inicia população: conjunto de varios vetores candidados a x
 def inicia_populacao():
     p = np.random.uniform(-5, 5, (N, D))
     return np.round(p, 2)
-
 
 # verificar qualidade da solução: quanto mais baixo melhor
 def avaliar_fitness(x):
     return np.sum(x**2)
 
 
-evolucao_diferencial()
+solucao = evolucao_diferencial()
+
+print("Melhor solução:", solucao)
+print("Custo minimo:", avaliar_fitness(solucao))
