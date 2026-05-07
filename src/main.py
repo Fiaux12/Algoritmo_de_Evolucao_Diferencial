@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 """
                 PROBLEMA 1
@@ -12,8 +13,8 @@ import numpy as np
 
 N = 5 #tamanho da população
 D = 10 #numero de variaveis
-F = 1.5 #Fator de Escala (0, 2], magnitude do passo
-CR = 0.7 #Prob. de Cruzamento CR
+F = 0.5 #Fator de Escala (0, 2], magnitude do passo
+CR = 0.7 #Prob. de Cruzamento CR [0, 1]
 
 def evolucao_diferencial():
     
@@ -24,25 +25,32 @@ def evolucao_diferencial():
 
     iteracoes = 0
 
-    while iteracoes < 1000:
-        
-        # Mutação
+    while iteracoes < 1:
+
         for i in range(N):
-            x_i = populacao[i]
+            # Mutação
+            xi = populacao[i]
             indices = list(range(N))
             indices.remove(i)
             
-            xr1, xr2, xr3 = populacao[np.random.choice(indices, 3, replace=False)]
-            
+            xr1, xr2, xr3 = populacao[np.random.choice(indices, 3, replace=False)]            
             v = xr1 + F * (xr2 - xr3)
 
+            #Aplica a borda
             v = np.clip(v, -5, 5)
 
+            # Cruzamento/Recombinação
+            u = np.zeros(D)
+            for j in range(D):
+                num = random.random()
+                if(num < CR):
+                    u[j] = v[j]
+                else:
+                    u[j] = xi[j]
+                
 
-       
-        # Cruzamento
-        # Recombinação
-        # Seleção
+            # 
+            # Seleção
 
         iteracoes += 1
 
