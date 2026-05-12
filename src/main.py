@@ -2,11 +2,12 @@ import numpy as np
 import random
 import statistics
 from itertools import product
+from graficos import grafico_F, grafico_CR, grafico_N
 
 D =  10                #numero de variaveis
-N_ =  [10, 20, 50]      #tamanho da população
-F_ =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
-CR_ = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
+N_ =  [10, 20, 30, 40, 50]      #tamanho da população
+F_ =  [0.3, 0.4, 0.5, 0.7, 0.8]   #Fator de Escala (0, 2]
+CR_ = [0.3, 0.4, 0.5, 0.7, 0.8]   #Prob. de Cruzamento CR [0, 1]
 
 # N = 20
 # F = 0.5
@@ -72,8 +73,8 @@ def inicia_populacao(N):
 def avaliar_fitness(x):
     return np.sum(x**2)
 
-
 def main():
+    resultados = []
     for N, F, CR in product(N_, F_, CR_ ):
         custos = []
         # solucoes = []
@@ -86,10 +87,21 @@ def main():
         melhor_indice = np.argmin(custos)
 
         media = statistics.mean(custos)
-        print(f"N={N}, F={F}, CR={CR} -> Média: {media}")
+        # print(f"N={N}, F={F}, CR={CR} -> Média: {media}")
 
-    # print("Melhor solução:", solucoes[melhor_indice])
-    # print("Menor custo:", custos[melhor_indice])
-    # print("Média dos custos:", statistics.mean(custos))
+        resultados.append({
+            "N": N,
+            "F": F,
+            "CR": CR,
+            "media": media
+        })
+
+        # print("Melhor solução:", solucoes[melhor_indice])
+        print(f"N={N}, F={F}, CR={CR} -> Menor custo: {custo}")
+        # print("Média dos custos:", statistics.mean(custos))
+
+    grafico_N(resultados, N_)
+    grafico_F(resultados, F_)
+    grafico_CR(resultados, CR_)
 
 main()
