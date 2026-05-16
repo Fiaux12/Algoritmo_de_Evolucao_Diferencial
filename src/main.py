@@ -17,7 +17,7 @@ def evolucao_diferencial(N, F, CR):
     populacao = inicia_populacao(N)
     iteracoes = 0
 
-    while iteracoes < 100:
+    while iteracoes < 1000:
         for i in range(N):
             xi = populacao[i]
 
