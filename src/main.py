@@ -5,9 +5,9 @@ from itertools import product
 from graficos import grafico_F, grafico_CR, grafico_N
 
 D =  10                #numero de variaveis
-N_ =  [10, 20, 30, 40, 50]      #tamanho da população
-F_ =  [0.3, 0.4, 0.5, 0.7, 0.8]   #Fator de Escala (0, 2]
-CR_ = [0.3, 0.4, 0.5, 0.7, 0.8]   #Prob. de Cruzamento CR [0, 1]
+N_ =  [10, 20, 50]      #tamanho da população
+F_ =  [0.3, 0.5, 0.8]   #Fator de Escala (0, 2]
+CR_ = [0.5, 0.7, 0.9]   #Prob. de Cruzamento CR [0, 1]
 
 # N = 20
 # F = 0.5
